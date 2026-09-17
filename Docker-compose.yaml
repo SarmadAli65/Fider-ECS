@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  fider:
+    image: fider:latest
+    environment:
+      - BASE_URL=${BASE_URL}
+      - GO_ENV=${GO_ENV}
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - EMAIL_NOREPLY=${EMAIL_NOREPLY}
+      - EMAIL_SMTP_HOST=${EMAIL_SMTP_HOST}
+      - EMAIL_SMTP_PORT=${EMAIL_SMTP_PORT}
+    ports:
+      - "80:3000"
+    depends_on:
+      pgdev:
+        condition: service_healthy
+      smtp:
+        condition: service_started
+      
+  
+  pgdev:
+    container_name: fider_pgdev
+    restart: always
+    image: postgres:17
+    volumes:
+      - pgdev-data:/var/lib/postgresql/data
+    ports:
+      - "3000:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -p 5432 -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  smtp:
+    image: mailhog/mailhog:latest
+    restart: always
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+
+volumes:
+  pgdev-data:
+  s3test-data:

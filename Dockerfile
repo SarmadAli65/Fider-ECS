@@ -1,4 +1,4 @@
-FROM golang:1.25.0-bookworm AS goBuilder
+FROM golang:1.25.0-bookworm AS go-builder
 
 WORKDIR /app
 
@@ -24,16 +24,25 @@ FROM debian:bookworm-slim
 
 WORKDIR /app
 
-COPY fider/.env ./
-
 COPY --from=nodeBuilder /app/dist ./dist
 COPY --from=nodeBuilder /app/ssr.js ./
+COPY --from=nodeBuilder /app/robots.txt /app
+COPY --from=nodeBuilder /app/favicon.png /app
 
-COPY --from=goBuilder /fider ./
+COPY --from=go-builder /fider ./
+COPY --from=go-builder /app/migrations /app/migrations
+COPY --from=go-builder /app/static /app/static
+COPY --from=go-builder /app/views /app/views
+COPY --from=go-builder /app/locale /app/locale
+COPY --from=go-builder /app/LICENSE /app
+
+
+RUN useradd nonroot && chown nonroot:nonroot /app -R
+USER nonroot
 
 EXPOSE 3000
 
-CMD ["./fider"]
+CMD ./fider migrate && ./fider
 
 
 
