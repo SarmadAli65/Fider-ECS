@@ -38,7 +38,7 @@ resource "aws_ecs_task_definition" "fider-ecs-task" {
   
     {
       name = "fider"
-      image = "019141479033.dkr.ecr.eu-west-1.amazonaws.com/ecs-fider"
+      image = "019141479033.dkr.ecr.eu-west-1.amazonaws.com/fider-ecs"
       cpu = 256
       memory = 512
       essential = true
