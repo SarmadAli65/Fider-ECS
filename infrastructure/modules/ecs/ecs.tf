@@ -23,8 +23,17 @@ resource "aws_ecs_service" "name" {
     container_port = 3000
   }
 
-
 }
+
+resource "aws_cloudwatch_log_group" "fider-logs" {
+  name = "fider-logs"
+  retention_in_days = 3
+
+  tags = {
+    Application = "Fider"
+  }
+}
+
 
 #### Configuring the task definition
 resource "aws_ecs_task_definition" "fider-ecs-task" {
@@ -47,6 +56,50 @@ resource "aws_ecs_task_definition" "fider-ecs-task" {
           containerPort = 3000
         }
       ]
+
+      environment = [
+        {name = "EMAIL_AWSSES_REGION", value = "eu-west-1"}
+      ]
+
+      secrets = [
+        {
+          name = "BASE_URL"
+          valueFrom = var.BASE_URL
+         },
+         {
+          name = "DATABASE_URL"
+          valueFrom = var.DATABASE_URL
+         },
+         {
+          name = "EMAIL_NOREPLY"
+          valueFrom = var.EMAIL_NOREPLY
+         },
+         {
+          name = "GO_ENV"
+          valueFrom = var.GO_ENV
+         },
+         {
+          name = "JWT_SECRET"
+          valueFrom = var.JWT_SECRET
+         },
+         {
+          name = "EMAIL_AWSSES_ACCESS_KEY_ID"
+          valueFrom = var.ACCESS_KEY
+         },
+         {
+          name = "EMAIL_AWSSES_SECRET_ACCESS_KEY"
+          valueFrom = var.SECRET_ACCESS_KEY
+         }
+      ]
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group" = aws_cloudwatch_log_group.fider-logs.name
+          "awslogs-region" = "eu-west-1"
+          "awslogs-stream-prefix" = "fider"
+        }
+      }
     }
   ]
   )

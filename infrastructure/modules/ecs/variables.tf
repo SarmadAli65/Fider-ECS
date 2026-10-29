@@ -17,3 +17,31 @@ variable "alb_tg_arn" {
     description = "the alb target group arn"
     type = string
 }
+
+variable "BASE_URL" {
+    type = string
+}
+
+variable "DATABASE_URL" {
+    type = string
+}
+
+variable "EMAIL_NOREPLY" {
+    type = string
+}
+
+variable "GO_ENV" {
+    type = string
+}
+
+variable "JWT_SECRET" {
+    type = string
+}
+
+variable "ACCESS_KEY" {
+    type = string
+}
+
+variable "SECRET_ACCESS_KEY" {
+    type = string
+}

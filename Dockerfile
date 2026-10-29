@@ -38,6 +38,8 @@ COPY --from=go-builder /app/LICENSE /app
 
 
 RUN useradd nonroot && chown nonroot:nonroot /app -R
+RUN apt-get update
+RUN apt install -y ca-certificates
 USER nonroot
 
 EXPOSE 3000
