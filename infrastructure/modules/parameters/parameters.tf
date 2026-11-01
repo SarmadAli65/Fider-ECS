@@ -1,7 +1,7 @@
 resource "aws_ssm_parameter" "BASE_URL" {
     name = "BASE_URL"
     type = "String"
-    value = "http://${var.base_url}"
+    value = "https://www.${var.base_url}"
 }
 
 resource "aws_ssm_parameter" "DATABASE_URL" {

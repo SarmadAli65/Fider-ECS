@@ -4,6 +4,12 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 6.0"
     }
+
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~> 5"
+    }
+
   }
   backend "s3" {
     bucket = "fider-remote-backup-019141479033-eu-west-1-an"
@@ -15,4 +21,7 @@ terraform {
 
 # Configure the AWS Provider
 provider "aws" {
+}
+
+provider "cloudflare" {
 }

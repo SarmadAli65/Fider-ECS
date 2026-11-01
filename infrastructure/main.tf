@@ -13,6 +13,12 @@ module "alb" {
   
 }
 
+module "cloudflare" {
+  source = "./modules/cloudflare"
+  domain_name = var.domain_name
+  alb_dns = module.alb.fider-alb-dns_name
+}
+
 module "ecs" {
   source = "./modules/ecs"
   
@@ -47,7 +53,7 @@ module "ses" {
 
 module "parameters" {
   source = "./modules/parameters"
-  base_url = module.alb.fider-alb-dns_name
+  base_url = var.domain_name
   JWT_SECRET = var.JWT_SECRET
   db_name = module.rds.db_name
   db_endpoint = module.rds.db_endpoint

@@ -22,3 +22,8 @@ variable "email_noreply" {
     type = string
     sensitive = true
 }
+
+variable "domain_name" {
+    type = string
+    sensitive = true
+}
